@@ -1,9 +1,10 @@
 
-const cacheName = 'v0.99.1';
+const cacheName = 'v1';
 const baseFiles = [
   '/',
   '/index.html',
   '/restaurant.html',
+  '/js/register-sw.js',
   '/js/dbhelper.js',
   '/js/main.js',
   '/css/styles.css',
@@ -26,7 +27,6 @@ self.addEventListener('install', function(e) {
 
 self.addEventListener('activate', function(e) {
   console.log('SW: Activating...');
-  clients.claim();
   e.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(cacheNames.map(function(thisCacheName) {
@@ -34,7 +34,10 @@ self.addEventListener('activate', function(e) {
           console.log('SW: Delete Cache', thisCacheName);
           return caches.delete(thisCacheName);
         }
-      })).then(() => console.log('SW: Activated!'));
+      })).then(() => {
+        self.clients.claim();
+        console.log('SW: Activated!')
+      });
     })
   );
 })
@@ -42,22 +45,35 @@ self.addEventListener('activate', function(e) {
 
 
 self.addEventListener('fetch', function(e) {
+
+  // Google Maps URLs behaved weirdly.
+  // Keep getting "Quota exceeded" when served by CacheOrFetch
   if( /googleapis|gstatic/.test(e.request.url) ) {
     return
   }
 
-  e.respondWith(
-    caches.open(cacheName).then(function(cache) {
-      return cache.match(e.request).then(function (response) {
-        const MSG = response ? 'SW: Found in Cache' : 'SW: Fetching and Caching'
-        console.log(MSG, e.request.url)
-        return response || fetch(e.request).then(function(response) {
-          console.log('SW: Fetched. Caching...', e.request.url)
-          cache.put(e.request, response.clone());
-          return response;
-        })
-      });
-    })
-  );
+  // the restaurant view pages have query params
+  // respond to all urls as just restaurant.html since the html does not change based on those query params
+  if( /restaurant\.html/.test(e.request.url) ) {
+    e.respondWith(fetchAndCache(new Request('/restaurant.html')))
+  }
+
+  // All other URLs can be cached
+  e.respondWith(fetchAndCache(e.request));
 
 })
+
+
+function fetchAndCache(request) {
+  return caches.open(cacheName).then(function(cache) {
+    return cache.match(request).then(function (response) {
+      const MSG = response ? 'SW: Found in Cache' : 'SW: Fetching and Caching'
+      console.log(MSG, request.url)
+      return response || fetch(request).then(function(response) {
+        console.log('SW: Fetched. Caching...', request.url)
+        cache.put(request, response.clone());
+        return response;
+      })
+    });
+  })
+}

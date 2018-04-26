@@ -63,7 +63,7 @@ header {
   text-transform: uppercase;
 }
 #footer span {
-  display: inline-block;
+  display: block;
 }
 /* ====================== Navigation ====================== */
 header nav {
@@ -152,6 +152,7 @@ header nav h1 a {
   letter-spacing: 0;
   margin: 0 0 0 6px;
   padding: 5px 8px;
+  -webkit-appearance: none;
 }
 
 /* ====================== Restaurant Listing ====================== */
