@@ -171,9 +171,9 @@ createRestaurantHTML = (restaurant) => {
   more.setAttribute('aria-label', 'Details for '+ restaurant.name +' restaurant');
   details.append(more);
 
-  li.append(details)
+  li.append(details);
 
-  return li
+  return li;
 }
 
 /**
@@ -184,7 +184,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
     google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url
+      window.location.href = marker.url;
     });
     self.markers.push(marker);
   });

@@ -8,28 +8,28 @@ const baseFiles = [
   '/js/dbhelper.js',
   '/js/main.js',
   '/css/styles.css',
-]
+];
 
-self.addEventListener('install', function(e) {
+self.addEventListener('install', e => {
   console.log('SW: Installing...');
   e.waitUntil(
-    caches.open(cacheName).then(function(cache) {
+    caches.open(cacheName).then(cache => {
       console.log('SW: Init Cache', cacheName);
       return cache.addAll(baseFiles).then(() => {
         console.log('SW: Installed!')
         self.skipWaiting();
-      })
+      });
     })
   ); // end e.waitUntil
-})
+});
 
 
 
-self.addEventListener('activate', function(e) {
+self.addEventListener('activate', e => {
   console.log('SW: Activating...');
   e.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(cacheNames.map(function(thisCacheName) {
+    caches.keys().then(cacheNames => {
+      return Promise.all(cacheNames.map(thisCacheName => {
         if (thisCacheName !== cacheName) {
           console.log('SW: Delete Cache', thisCacheName);
           return caches.delete(thisCacheName);
@@ -44,7 +44,7 @@ self.addEventListener('activate', function(e) {
 
 
 
-self.addEventListener('fetch', function(e) {
+self.addEventListener('fetch', e => {
 
   // Google Maps URLs behaved weirdly.
   // Keep getting "Quota exceeded" when served by CacheOrFetch
@@ -65,15 +65,15 @@ self.addEventListener('fetch', function(e) {
 
 
 function fetchAndCache(request) {
-  return caches.open(cacheName).then(function(cache) {
-    return cache.match(request).then(function (response) {
+  return caches.open(cacheName).then(cache => {
+    return cache.match(request).then(response => {
       const MSG = response ? 'SW: Found in Cache' : 'SW: Fetching and Caching'
-      console.log(MSG, request.url)
-      return response || fetch(request).then(function(response) {
+      console.log(MSG, request.url);
+      return response || fetch(request).then(response => {
         console.log('SW: Fetched. Caching...', request.url)
         cache.put(request, response.clone());
         return response;
-      })
+      });
     });
   })
 }
