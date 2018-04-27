@@ -181,16 +181,15 @@ header nav h1 a {
 }
 .restaurant-card .restaurant-img {
   background-color: #ccc;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   border-radius: 2px 2px 0 0;
-  padding-bottom: 50%;
+  height: auto !important;
+  max-width: 100%;
+  object-fit: cover;
 }
 .restaurant-card .restaurant-details {
   padding: 20px 20px;
 }
-.restaurant-card h1 {
+.restaurant-card h2 {
   color: #f18200;
   font-size: 2rem;
   font-weight: 200;
@@ -263,7 +262,7 @@ header nav h1 a {
 #reviews-container {
   margin: 30px 0 0;
 }
-#reviews-container h2 {
+#reviews-container h3 {
   color: #f58500;
   font-size: 2rem;
   font-weight: 300;
@@ -271,12 +270,12 @@ header nav h1 a {
   overflow: hidden;
   text-align: center;
 }
-#reviews-container h2 span {
+#reviews-container h3 span {
   padding: 0 10px;
   position: relative;
 }
-#reviews-container h2 span::before,
-#reviews-container h2 span::after {
+#reviews-container h3 span::before,
+#reviews-container h3 span::after {
   background-color: #ccc;
   content: "";
   height: 1px;
@@ -286,7 +285,7 @@ header nav h1 a {
   transform: translate(0,-50%);
   width: 100vw;
 }
-#reviews-container h2 span::after {
+#reviews-container h3 span::after {
   left: 100%;
   right: auto;
 }
@@ -338,7 +337,8 @@ header nav h1 a {
   }
   .restaurant-card .restaurant-img {
     border-radius: 2px 0 0 2px;
-    flex: 0 0 50%;
+    flex: 0 0 auto;
+    width: 50%;
   }
   .restaurant-card .restaurant-details {
     flex: 1 1 100%;

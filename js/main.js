@@ -140,16 +140,17 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('article');
   li.className = 'restaurant-card';
 
-  const image = document.createElement('div');
+  const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.style.backgroundImage = 'url('+ DBHelper.imageUrlForRestaurant(restaurant) +')';
+  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = 'Photo of '+ restaurant.name +' restaurant';
   image.setAttribute('aria-label', 'Restaurant photo');
   li.append(image);
 
   const details = document.createElement('div');
   details.className = 'restaurant-details';
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   name.setAttribute('aria-label', 'Restaurant name');
   details.append(name);
